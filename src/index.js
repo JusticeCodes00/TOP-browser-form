@@ -25,20 +25,28 @@ const showError = (input) => {
   errorContainer.textContent = errorMsg;
 };
 
+// From feedback
+const validatePasswords = () => {
+  const password = form.querySelector("[data-form-field='password']");
+  const confirm = form.querySelector("[data-form-field='passwordConfirm']");
+
+  if (confirm.value && password.value !== confirm.value) {
+    confirm.setCustomValidity("Passwords must match");
+  } else {
+    confirm.setCustomValidity("");
+  }
+};
+
 const validateField = (e) => {
   const input = e.target;
   if (input.tagName !== "INPUT") return;
 
-  if (input.getAttribute("data-form-field") === "passwordConfirm") {
-    const passwordInputValue = form.querySelector(
-      "[data-form-field='password']",
-    ).value;
-    const confirmInputValue = input.value;
-
-    input.setCustomValidity("");
-    if (passwordInputValue !== confirmInputValue) {
-      input.setCustomValidity("both passwords must match.");
-    }
+  // From feedback
+  if (
+    input.getAttribute("data-form-field") === "password" ||
+    input.getAttribute("data-form-field") === "passwordConfirm"
+  ) {
+    validatePasswords();
   }
 
   if (!input.validity.valid) {
@@ -61,13 +69,20 @@ const validateForm = (e) => {
     formFields.forEach((f) => showError(f));
     return;
   }
+
   form.reset();
-  highFiveDiv.textContent = "high five, you did it.";
+  highFiveDiv.textContent = "High five! ✋ Form submitted successfully.";
+
+  // Clear after 3 seconds
+  setTimeout(() => {
+    highFiveDiv.textContent = "";
+  }, 3000);
 };
 
 const form = document.querySelector("form[data-form]");
+
 const highFiveDiv = document.querySelector("[data-high-five-div]");
 
 form.addEventListener("input", validateField);
-form.addEventListener("mouseout", validateField);
+form.addEventListener("focusout", validateField);
 form.addEventListener("submit", validateForm);

@@ -80,11 +80,11 @@ input[data-form-field] {
   margin-bottom: 0.2rem;
   width: 100%;
 
-  &:invalid {
+  &:user-invalid {
     border-color: #ff0000;
   }
 
-  &:valid {
+  &:user-valid {
     border-color: #1fbc6df3;
   }
 }
